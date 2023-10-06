@@ -1,8 +1,8 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { Pictogram } from "./components/Pictogram";
-import { getAllPictograms } from "./services/notes/getAllPictograms.js";
-import { createPictogram } from "./services/notes/createPictogram.js";
+import { getAllPictograms } from "./services/pictograms/getAllPictograms.js";
+import { createPictogram } from "./services/pictograms/createPictogram.js";
 
 function App() {
   const [pictograms, setPictograms] = useState([]);
