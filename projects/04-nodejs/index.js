@@ -10,6 +10,7 @@ const handleErrors = require('./middleware/handleErrors')
 
 app.use(cors())
 app.use(express.json())
+app.use('/static', express.static('images'))
 
 app.get('/', (req, res) => {
   res.send('<h1>Bienvenido a mi PICTOAPI</h1>')
@@ -24,14 +25,9 @@ app.get('/api/pictograms', (req, res) => {
 app.get('/api/pictograms/:id', (req, res, next) => {
   const id = req.params.id
   Pictogram.findById(id).then((pictogram) => {
-    if (pictogram) {
-      res.json(pictogram)
-    } else {
-      res.status(404).end()
-    }
-  }).catch((error) => {
-    next(error)
-  })
+    if (pictogram) return res.json(pictogram)
+    res.status(404).end()
+  }).catch((error) => { next(error) })
 })
 
 app.put('/api/pictograms/:id', (req, res, next) => {

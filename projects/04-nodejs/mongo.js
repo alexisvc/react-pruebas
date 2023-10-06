@@ -14,3 +14,7 @@ mongoose
   .catch((err) => {
     console.error(err)
   })
+// Cerrar la conexión con la base de datos
+process.on('uncaughtException', () => {
+  mongoose.connection.disconnect()
+})
