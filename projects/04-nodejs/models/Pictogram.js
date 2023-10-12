@@ -4,7 +4,11 @@ const mongoose = require('mongoose')
 const pictogramSchema = new mongoose.Schema({
   name: String,
   category: String,
-  url: String
+  url: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 // Transformar el objeto devuelto por Mongoose
 pictogramSchema.set('toJSON', {

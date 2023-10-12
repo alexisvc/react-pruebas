@@ -1,8 +1,9 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { Pictogram } from "./components/Pictogram";
-import { getAllPictograms } from "./services/pictograms/getAllPictograms.js";
-import { createPictogram } from "./services/pictograms/createPictogram.js";
+
+import pictogramServices from "./services/pictograms";
+import loginServices from "./services/login";
 
 function App() {
   const [pictograms, setPictograms] = useState([]);
@@ -11,11 +12,15 @@ function App() {
   const [urlValue, setUrlValue] = useState("");
   const [loading, setLoading] = useState();
 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     console.log("useEffect");
     setLoading(true);
-    //Uso del servicio
-    getAllPictograms().then((response) => {
+    // Llamada al servicio para obtener todos los pictogramas
+    pictogramServices.getAllPictograms().then((response) => {
       setPictograms(response);
       setLoading(false);
     });
@@ -25,15 +30,15 @@ function App() {
     setNameValue(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleCreateSubmit = (e) => {
     e.preventDefault(); // Evita la recarga de la página
     const pictogramToAdd = {
       name: nameValue,
       category: categoryValue, // Utiliza el valor de category
       url: urlValue, // Utiliza el valor de url
     };
-
-    createPictogram(pictogramToAdd)
+    // Llamada al servicio para crear el pictograma
+    pictogramServices.createPictogram(pictogramToAdd)
       .then((newPictogram) => {
         setPictograms((prevPictograms) => [...prevPictograms, newPictogram]);
         setNameValue("");
@@ -46,17 +51,47 @@ function App() {
       });
   };
 
-  console.log("render");
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Login", username, password)
+
+    try {
+      const user = await loginServices.login({ username, password })
+      setUser(user)
+      setUsername("")
+      setPassword("")
+      console.log("User", user)
+    } catch (error) {
+      console.error("Error al hacer login:", error)
+    }
+
+  }
+
   return (
     <div className="main">
-      <h1>Pictogramas</h1>
-      {loading ? <p>Cargando...</p> : null}{" "}
-      {/*Si loading es true, muestra el mensaje*/}
-      {pictograms.map((pictogram) => (
-        <Pictogram key={pictogram.id} pictogram={pictogram} />
-      ))}
+      <h1>Login</h1>
+      <form onSubmit={handleLoginSubmit}>
+        <input
+          type="text"
+          placeholder="username"
+          value={username}
+          name="username"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="password"
+          value={password}
+          name="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button>
+          Login
+        </button>
+      </form>
+
       <h1>Formulario</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleCreateSubmit}>
         <input type="text" placeholder="name" onChange={handleChange} value={nameValue} />
         <br />
         <input
@@ -75,6 +110,13 @@ function App() {
         <br />
         <button>Crear pictograma</button>
       </form>
+
+      <h1>Pictogramas</h1>
+      {loading ? <p>Cargando...</p> : null}{" "}
+      {/*Si loading es true, muestra el mensaje*/}
+      {pictograms.map((pictogram) => (
+        <Pictogram key={pictogram.id} pictogram={pictogram} />
+      ))}
     </div>
   );
 }
