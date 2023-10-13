@@ -4,12 +4,11 @@ import { Pictogram } from "./components/Pictogram";
 
 import pictogramServices from "./services/pictograms";
 import loginServices from "./services/login";
+import { LoginForm } from "./components/LoginForm";
+import NoteForm from "./components/PictogramForm";
 
 function App() {
   const [pictograms, setPictograms] = useState([]);
-  const [nameValue, setNameValue] = useState("");
-  const [categoryValue, setCategoryValue] = useState("");
-  const [urlValue, setUrlValue] = useState("");
   const [loading, setLoading] = useState();
 
   const [username, setUsername] = useState("");
@@ -26,28 +25,29 @@ function App() {
     });
   }, []);
 
-  const handleChange = (e) => {
-    setNameValue(e.target.value);
-  };
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedUser")
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      pictogramServices.setToken(user.token)
+    }
+  }, []);
 
-  const handleCreateSubmit = (e) => {
-    e.preventDefault(); // Evita la recarga de la página
-    const pictogramToAdd = {
-      name: nameValue,
-      category: categoryValue, // Utiliza el valor de category
-      url: urlValue, // Utiliza el valor de url
-    };
-    // Llamada al servicio para crear el pictograma
-    pictogramServices.createPictogram(pictogramToAdd)
+  const handleLogout = () => {
+    setUser(null)
+    pictogramServices.setToken(user.token)
+    window.localStorage.removeItem("loggedUser")
+  }
+
+  const createPictogram = (pictogramObject) => {
+    pictogramServices
+      .createPictogram(pictogramObject)
       .then((newPictogram) => {
         setPictograms((prevPictograms) => [...prevPictograms, newPictogram]);
-        setNameValue("");
-        setCategoryValue(""); // Limpia el valor del campo de categoría
-        setUrlValue(""); // Limpia el valor del campo de URL
       })
       .catch((error) => {
         console.error("Error al crear el pictograma:", error);
-        // Aquí puedes mostrar un mensaje de error al usuario si lo deseas
       });
   };
 
@@ -57,6 +57,11 @@ function App() {
 
     try {
       const user = await loginServices.login({ username, password })
+      // Guardamos el usuario en el localStorage
+      window.localStorage.setItem("loggedUser", JSON.stringify(user))
+      // Guardamos el token en el servicio de pictogramas
+      pictogramServices.setToken(user.token)
+      // Guardamos el usuario en el estado de la aplicación
       setUser(user)
       setUsername("")
       setPassword("")
@@ -64,52 +69,24 @@ function App() {
     } catch (error) {
       console.error("Error al hacer login:", error)
     }
-
   }
 
   return (
     <div className="main">
-      <h1>Login</h1>
-      <form onSubmit={handleLoginSubmit}>
-        <input
-          type="text"
-          placeholder="username"
-          value={username}
-          name="username"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="password"
-          value={password}
-          name="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button>
-          Login
-        </button>
-      </form>
-
-      <h1>Formulario</h1>
-      <form onSubmit={handleCreateSubmit}>
-        <input type="text" placeholder="name" onChange={handleChange} value={nameValue} />
-        <br />
-        <input
-          type="text"
-          placeholder="Category"
-          value={categoryValue}
-          onChange={(e) => setCategoryValue(e.target.value)}
-        />
-        <br />
-        <input
-          type="text"
-          placeholder="URL"
-          value={urlValue}
-          onChange={(e) => setUrlValue(e.target.value)}
-        />
-        <br />
-        <button>Crear pictograma</button>
-      </form>
+      {
+        user
+          ? <NoteForm 
+              createPictogram={createPictogram}
+              handleLogout={handleLogout}
+            />
+          : <LoginForm 
+              username={username}
+              password={password}
+              handleUsernameChange={(e) => setUsername(e.target.value)}
+              handlePasswordChange={(e) => setPassword(e.target.value)}
+              handleLoginSubmit={handleLoginSubmit}
+            />
+      }
 
       <h1>Pictogramas</h1>
       {loading ? <p>Cargando...</p> : null}{" "}
