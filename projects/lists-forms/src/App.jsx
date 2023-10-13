@@ -44,7 +44,7 @@ function App() {
     pictogramServices
       .createPictogram(pictogramObject)
       .then((newPictogram) => {
-        setPictograms((prevPictograms) => [...prevPictograms, newPictogram]);
+        setPictograms(pictograms.concat(newPictogram));
       })
       .catch((error) => {
         console.error("Error al crear el pictograma:", error);
@@ -72,7 +72,7 @@ function App() {
   }
 
   return (
-    <div className="main">
+    <>
       {
         user
           ? <NoteForm 
@@ -94,7 +94,7 @@ function App() {
       {pictograms.map((pictogram) => (
         <Pictogram key={pictogram.id} pictogram={pictogram} />
       ))}
-    </div>
+    </>
   );
 }
 
