@@ -5,7 +5,8 @@ import { Pictogram } from "./components/Pictogram";
 import pictogramServices from "./services/pictograms";
 import loginServices from "./services/login";
 import { LoginForm } from "./components/LoginForm";
-import NoteForm from "./components/PictogramForm";
+import PictogramForm from "./components/PictogramForm";
+import { PictogramDisplay } from "./components/PictogramDisplay";
 
 function App() {
   const [pictograms, setPictograms] = useState([]);
@@ -13,15 +14,15 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    if (user) {
-      pictogramServices.getPictogramsByUserId(user.id).then((response) => {
-        setPictograms(response);
-        setLoading(false);
-      });
-    }
-  }, [user]);
-  
+  setLoading(true);
+  if (user) {
+    pictogramServices.getPictogramsByUserId(user.id).then((response) => {
+      setPictograms(response);
+      setLoading(false);
+    });
+  }
+}, [user]);
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser")
@@ -66,18 +67,18 @@ function App() {
       {
         user
           ? <div>
-              <NoteForm 
+              <PictogramForm 
                 createPictogram={createPictogram}
-              /> <br/>
+              />
               <div>
                 <button onClick={handleLogout}>Logout</button>
               </div>
               <div>
-                <h1>Pictograms</h1>
                 { loading ? <p>Cargando...</p> : null }
-                {pictograms.map((pictogram) => (
+                <PictogramDisplay images={pictograms} />
+                {/*{pictograms.map((pictogram) => (
                   <Pictogram key={pictogram.id} pictogram={pictogram} />
-                ))}
+                ))}*/}
               </div>
             </div>
           : <LoginForm
