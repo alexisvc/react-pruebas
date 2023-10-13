@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Togglable from "./Togglable";
 
-export default function NoteForm({ createPictogram, handleLogout}) {
+export default function NoteForm({ createPictogram }) {
   
   const [nameValue, setNameValue] = useState("");
   const [categoryValue, setCategoryValue] = useState("");
@@ -49,9 +49,6 @@ export default function NoteForm({ createPictogram, handleLogout}) {
               <br />
               <button>Create</button>
             </form>
-            <div>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
         </Togglable>
       )
 }

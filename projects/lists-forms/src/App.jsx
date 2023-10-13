@@ -13,7 +13,6 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log("useEffect");
     setLoading(true);
     // Llamada al servicio para obtener todos los pictogramas
     pictogramServices.getAllPictograms().then((response) => {
@@ -63,25 +62,25 @@ function App() {
     <>
       {
         user
-          ? <NoteForm 
-              createPictogram={createPictogram}
-              handleLogout={handleLogout}
-            />
+          ? <div>
+              <NoteForm 
+                createPictogram={createPictogram}
+              /> <br/>
+              <div>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+              <div>
+                <h1>Pictograms</h1>
+                { loading ? <p>Cargando...</p> : null }
+                {pictograms.map((pictogram) => (
+                  <Pictogram key={pictogram.id} pictogram={pictogram} />
+                ))}
+              </div>
+            </div>
           : <LoginForm
               loginUser={loginUser}
             />
       }
-
-      <h1>Pictogramas</h1>
-      {
-        loading 
-          ? <p>Cargando...</p> 
-          : null
-      }
-      
-      {pictograms.map((pictogram) => (
-        <Pictogram key={pictogram.id} pictogram={pictogram} />
-      ))}
     </>
   );
 }
