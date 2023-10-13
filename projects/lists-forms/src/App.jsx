@@ -15,6 +15,7 @@ function App() {
   useEffect(() => {
     setLoading(true);
     // Llamada al servicio para obtener todos los pictogramas
+    // Considerar que solo deberia traer los pictogramas del usuario logueado
     pictogramServices.getAllPictograms().then((response) => {
       setPictograms(response);
       setLoading(false);

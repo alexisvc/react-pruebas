@@ -23,32 +23,32 @@ export default function NoteForm({ createPictogram }) {
   }
   
   return (
-          <Togglable buttonLabel="New pictogram">
-            <h3>Create a new pictogram</h3>
-            <form onSubmit={handleSubmit}>
-              <input 
-                type="text" 
-                placeholder="name"
-                value={nameValue} 
-                onChange={(e) => setNameValue(e.target.value)}
-                />
-              <br />
-              <input
-                type="text"
-                placeholder="Category"
-                value={categoryValue}
-                onChange={(e) => setCategoryValue(e.target.value)}
-              />
-              <br />
-              <input
-                type="text"
-                placeholder="URL"
-                value={urlValue}
-                onChange={(e) => setUrlValue(e.target.value)}
-              />
-              <br />
-              <button>Create</button>
-            </form>
-        </Togglable>
-      )
+      <Togglable buttonLabel="New pictogram">
+        <h3>Create a new pictogram</h3>
+        <form onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            placeholder="name"
+            value={nameValue} 
+            onChange={(e) => setNameValue(e.target.value)}
+            />
+          <br />
+          <input
+            type="text"
+            placeholder="Category"
+            value={categoryValue}
+            onChange={(e) => setCategoryValue(e.target.value)}
+          />
+          <br />
+          <input
+            type="text"
+            placeholder="URL"
+            value={urlValue}
+            onChange={(e) => setUrlValue(e.target.value)}
+          />
+          <br />
+          <button>Create</button>
+        </form>
+    </Togglable>
+  )
 }
