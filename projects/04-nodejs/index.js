@@ -8,7 +8,7 @@ const app = express()
 const notFound = require('./middleware/notFound')
 const handleErrors = require('./middleware/handleErrors')
 
-const pictogramsRouter = require('./controllers/pictograms') 
+const pictogramsRouter = require('./controllers/pictograms')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 

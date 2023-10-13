@@ -14,13 +14,14 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    // Llamada al servicio para obtener todos los pictogramas
-    // Considerar que solo deberia traer los pictogramas del usuario logueado
-    pictogramServices.getAllPictograms().then((response) => {
-      setPictograms(response);
-      setLoading(false);
-    });
-  }, []);
+    if (user) {
+      pictogramServices.getPictogramsByUserId(user.id).then((response) => {
+        setPictograms(response);
+        setLoading(false);
+      });
+    }
+  }, [user]);
+  
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser")
@@ -54,6 +55,7 @@ function App() {
       window.localStorage.setItem("loggedUser", JSON.stringify(user))
       pictogramServices.setToken(user.token)
       setUser(user)
+      console.log("Login exitoso:", user)
     } catch (error) {
       console.error("Error al hacer login:", error)
     }

@@ -10,6 +10,13 @@ const getAllPictograms = () => {
     return axios.get(baseUrl).then((response) => response.data);
     };
 
+const getPictogramsByUserId = (userId) => {
+    const config = {
+        headers: { Authorization: token },
+    };
+    return axios.get(`${baseUrl}/${userId}`, config).then((response) => response.data);
+    };
+
 const createPictogram = (newObject) => {
     const config = {
         headers: { Authorization: token },
@@ -26,4 +33,4 @@ const updatePictogram = (id, newObject) => {
     .then((response) => response.data);
     };
 
-export default { getAllPictograms, createPictogram, updatePictogram, setToken };
+export default { getAllPictograms, getPictogramsByUserId, createPictogram, updatePictogram, setToken };

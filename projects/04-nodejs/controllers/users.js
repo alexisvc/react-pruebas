@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/User')
-
+// Obtener todos los usuarios
 usersRouter.get('/', async (req, res, next) => {
   const users = await User.find({}).populate('pictograms', {
     name: 1,
@@ -9,7 +9,7 @@ usersRouter.get('/', async (req, res, next) => {
   })
   res.json(users)
 })
-
+// Crear usuario
 usersRouter.post('/', async (req, res, next) => {
   try {
     const body = req.body
