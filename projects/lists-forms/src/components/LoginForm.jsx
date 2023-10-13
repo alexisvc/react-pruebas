@@ -1,6 +1,21 @@
 import Togglable from './Togglable'
+import React, { useState } from 'react'
 
-export const LoginForm = ({handleLoginSubmit, username, handleUsernameChange, password, handlePasswordChange}) => {
+export const LoginForm = ({ loginUser }) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault();
+    
+        try {
+          loginUser({ username, password })
+          setUsername("")
+          setPassword("")
+        } catch (error) {
+          console.error("Error al hacer login:", error)
+        }
+      }
 
     return ( 
             <Togglable buttonLabel='Show login'>
@@ -12,7 +27,7 @@ export const LoginForm = ({handleLoginSubmit, username, handleUsernameChange, pa
                         placeholder="username"
                         value={username}
                         name="username"
-                        onChange={handleUsernameChange}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                     </div>
                     <div>
@@ -21,7 +36,7 @@ export const LoginForm = ({handleLoginSubmit, username, handleUsernameChange, pa
                         placeholder="password"
                         value={password}
                         name="password"
-                        onChange={handlePasswordChange}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     </div>
                     <div>

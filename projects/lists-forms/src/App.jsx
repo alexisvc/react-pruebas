@@ -10,9 +10,6 @@ import NoteForm from "./components/PictogramForm";
 function App() {
   const [pictograms, setPictograms] = useState([]);
   const [loading, setLoading] = useState();
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -51,21 +48,12 @@ function App() {
       });
   };
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Login", username, password)
-
+  const loginUser = async (username, password) => {
     try {
-      const user = await loginServices.login({ username, password })
-      // Guardamos el usuario en el localStorage
+      const user = await loginServices.login( username, password )
       window.localStorage.setItem("loggedUser", JSON.stringify(user))
-      // Guardamos el token en el servicio de pictogramas
       pictogramServices.setToken(user.token)
-      // Guardamos el usuario en el estado de la aplicación
       setUser(user)
-      setUsername("")
-      setPassword("")
-      console.log("User", user)
     } catch (error) {
       console.error("Error al hacer login:", error)
     }
@@ -79,18 +67,18 @@ function App() {
               createPictogram={createPictogram}
               handleLogout={handleLogout}
             />
-          : <LoginForm 
-              username={username}
-              password={password}
-              handleUsernameChange={(e) => setUsername(e.target.value)}
-              handlePasswordChange={(e) => setPassword(e.target.value)}
-              handleLoginSubmit={handleLoginSubmit}
+          : <LoginForm
+              loginUser={loginUser}
             />
       }
 
       <h1>Pictogramas</h1>
-      {loading ? <p>Cargando...</p> : null}{" "}
-      {/*Si loading es true, muestra el mensaje*/}
+      {
+        loading 
+          ? <p>Cargando...</p> 
+          : null
+      }
+      
       {pictograms.map((pictogram) => (
         <Pictogram key={pictogram.id} pictogram={pictogram} />
       ))}
