@@ -19,7 +19,7 @@ export const LoginForm = ({ loginUser }) => {
 
     return ( 
             <Togglable buttonLabel='Show login'>
-                <h3>LOGIN</h3>
+                <h2>LOGIN</h2>
                 <form onSubmit={handleLoginSubmit}>
                     <div>
                     <input

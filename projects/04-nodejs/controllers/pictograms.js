@@ -65,7 +65,7 @@ pictogramsRouter.post('/', userExtractor, async (req, res, next) => {
     })
     // Guardar el pictograma en la base de datos
     const savedPictogram = await newPictogram.save()
-    // Asignar el ID del pictograma al usuario
+    // Asignar el pictograma al usuario
     const user = await User.findById(userId)
     user.pictograms = user.pictograms.concat(savedPictogram._id)
     await user.save()

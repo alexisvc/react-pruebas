@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './PictogramDisplay.css';
+import Togglable from './Togglable';
+
 export function PictogramDisplay({ images }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [speaking, setSpeaking] = useState(false);
@@ -68,56 +70,58 @@ export function PictogramDisplay({ images }) {
     : images;
 
   return (
-    <div className="container">
-      <div className="selected-images-and-buttons">
-        <div className="selected-images">
-          {selectedImages.map((image, index) => (
-            <div key={index} className="card">
-              <img src={image.url} alt={image.alt} />
-              <p>{image.alt}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="button-container">
-          <button onClick={handleDeleteLastImage} disabled={speaking}>
-            Eliminar
-          </button>
-          <button onClick={handleDeleteAllImages} disabled={speaking}>
-            Eliminar todos
-          </button>
-          <button onClick={handleReadSelectedImages} disabled={speaking}>
-            Play
-          </button>
-        </div>
-      </div>
-
-      {/* Grid para mostrar categorías y pictogramas */}
-      <div className="grid-container">
-        {/* Columna de categorías */}
-        <div className="categories">
-            <button onClick={() => handleCategoryFilter('')}>Todas</button>
-          {categories.map((category, index) => (
-            <button key={index} onClick={() => handleCategoryFilter(category)}>
-              {category}
-            </button>
-          ))}
-        </div>
-
-        {/* Columna de pictogramas */}
-        <div className="image-grid">
-          <div className="image-grid-inner">
-            {filteredImages.map((image, index) => (
-              <div key={index} className="card" onClick={() => handleImageClick(image.name, image.url)}>
-                <div className="card-image">
-                  <img src={image.url} alt={image.name} />
-                </div>
-                <p>{image.name}</p>
+    <Togglable buttonLabel="Tablero de comunicación">
+      <div className="container">
+        <div className="selected-images-and-buttons">
+          <div className="selected-images">
+            {selectedImages.map((image, index) => (
+              <div key={index} className="card">
+                <img src={image.url} alt={image.alt} />
+                <p>{image.alt}</p>
               </div>
             ))}
           </div>
+
+          <div className="button-container">
+            <button onClick={handleDeleteLastImage} disabled={speaking}>
+              Eliminar
+            </button>
+            <button onClick={handleDeleteAllImages} disabled={speaking}>
+              Eliminar todos
+            </button>
+            <button onClick={handleReadSelectedImages} disabled={speaking}>
+              Play
+            </button>
+          </div>
+        </div>
+
+        {/* Grid para mostrar categorías y pictogramas */}
+        <div className="grid-container">
+          {/* Columna de categorías */}
+          <div className="categories">
+              <button onClick={() => handleCategoryFilter('')}>Todas</button>
+            {categories.map((category, index) => (
+              <button key={index} onClick={() => handleCategoryFilter(category)}>
+                {category}
+              </button>
+            ))}
+          </div>
+
+          {/* Columna de pictogramas */}
+          <div className="image-grid">
+            <div className="image-grid-inner">
+              {filteredImages.map((image, index) => (
+                <div key={index} className="card" onClick={() => handleImageClick(image.name, image.url)}>
+                  <div className="card-image">
+                    <img src={image.url} alt={image.name} />
+                  </div>
+                  <p>{image.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </Togglable>
   );
 }

@@ -7,6 +7,7 @@ import loginServices from "./services/login";
 import { LoginForm } from "./components/LoginForm";
 import PictogramForm from "./components/PictogramForm";
 import { PictogramDisplay } from "./components/PictogramDisplay";
+import RecognitionGame from "./components/Game/RecognitionGame";
 
 function App() {
   const [pictograms, setPictograms] = useState([]);
@@ -76,9 +77,7 @@ function App() {
               <div>
                 { loading ? <p>Cargando...</p> : null }
                 <PictogramDisplay images={pictograms} />
-                {/*{pictograms.map((pictogram) => (
-                  <Pictogram key={pictogram.id} pictogram={pictogram} />
-                ))}*/}
+                <RecognitionGame pictograms={pictograms}></RecognitionGame>
               </div>
             </div>
           : <LoginForm
