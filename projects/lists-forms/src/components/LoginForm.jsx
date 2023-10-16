@@ -1,50 +1,59 @@
-import Togglable from './Togglable'
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export const LoginForm = ({ loginUser }) => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+export const LoginForm = ({ login }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-    const handleLoginSubmit = async (e) => {
-        e.preventDefault();
-    
-        try {
-          loginUser({ username, password })
-          setUsername("")
-          setPassword("")
-        } catch (error) {
-          console.error("Error al hacer login:", error)
-        }
-      }
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-    return ( 
-            <Togglable buttonLabel='Show login'>
-                <h2>LOGIN</h2>
-                <form onSubmit={handleLoginSubmit}>
-                    <div>
-                    <input
-                        type="text"
-                        placeholder="username"
-                        value={username}
-                        name="username"
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    </div>
-                    <div>
-                    <input
-                        type="password"
-                        placeholder="password"
-                        value={password}
-                        name="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    </div>
-                    <div>
-                    <button>
-                        Login
-                    </button>
-                    </div>
-                </form>
-            </Togglable>
-      )
+    try {
+      await login({ username, password });
+      console.log("Login realizado con éxito");
+      setUsername("");
+      setPassword("");
+      toast.success("Login exitoso", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.error("Error al hacer login:", error);
+      toast.error("Credenciales incorrectas. Por favor, inténtalo de nuevo.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
+  };
+
+  return (
+    <div>
+      <ToastContainer />
+      <h2>LOGIN</h2>
+      <form onSubmit={handleLogin}>
+        <div>
+          <input
+            type="text"
+            placeholder="username"
+            value={username}
+            name="username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="password"
+            value={password}
+            name="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div>
+          <button>Login</button>
+        </div>
+      </form>
+    </div>
+  );
+};

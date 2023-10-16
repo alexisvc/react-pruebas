@@ -1,13 +1,16 @@
-import React, { useState } from "react";
-import Togglable from "./Togglable";
+// PictogramForm.jsx
 
-export default function NoteForm({ createPictogram }) {
-  
-  const [nameValue, setNameValue] = useState("");
-  const [categoryValue, setCategoryValue] = useState("");
-  const [urlValue, setUrlValue] = useState("");
+import React, { useState } from 'react';
+import Togglable from './Togglable';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-  const handleSubmit = (e) => {
+export default function PictogramForm({ createPictogram }) {
+  const [nameValue, setNameValue] = useState('');
+  const [categoryValue, setCategoryValue] = useState('');
+  const [urlValue, setUrlValue] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const pictogramObject = {
@@ -16,22 +19,37 @@ export default function NoteForm({ createPictogram }) {
       url: urlValue,
     };
 
-    createPictogram(pictogramObject);
-    setNameValue("");
-    setCategoryValue("");
-    setUrlValue("");
-  }
-  
+    try {
+      await createPictogram(pictogramObject);
+      // Notificación de éxito
+      toast.success('Pictogram created successfully', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+      setNameValue('');
+      setCategoryValue('');
+      setUrlValue('');
+    } catch (error) {
+      // Notificación de error
+      console.error('Error creating pictogram:', error);
+      toast.error('There was an error creating the pictogram. Please try again.', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    }
+  };
+
   return (
-      <Togglable buttonLabel="New pictogram">
+    <Togglable buttonLabel="New pictogram">
+      <div>
         <h3>Create a new pictogram</h3>
         <form onSubmit={handleSubmit}>
-          <input 
-            type="text" 
-            placeholder="name"
-            value={nameValue} 
+          <input
+            type="text"
+            placeholder="Name"
+            value={nameValue}
             onChange={(e) => setNameValue(e.target.value)}
-            />
+          />
           <br />
           <input
             type="text"
@@ -49,6 +67,8 @@ export default function NoteForm({ createPictogram }) {
           <br />
           <button>Create</button>
         </form>
+      </div>
+      <ToastContainer />
     </Togglable>
-  )
+  );
 }

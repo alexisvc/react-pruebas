@@ -84,8 +84,13 @@ function RecognitionGame({ pictograms }) {
         alert("¡Has completado el juego!");
         // Aumentar las insignias al completar el juego
         setBadges(badges + 1);
-        setDifficulty("Fácil"); // Reinicia el juego con la dificultad "Fácil" (puedes ajustar esto)
-        getRandomPictograms("Fácil");
+        if(difficulty === "Fácil") {
+          setDifficulty("Normal"); // Reinicia el juego con la dificultad "Normal" (puedes ajustar esto)
+          getRandomPictograms("Normal");
+        } else if (difficulty === "Normal") {
+          setDifficulty("Difícil"); // Reinicia el juego con la dificultad "Difícil" (puedes ajustar esto)
+          getRandomPictograms("Difícil");
+        } 
       }
     } else {
       alert("Incorrecto. Intenta de nuevo.");

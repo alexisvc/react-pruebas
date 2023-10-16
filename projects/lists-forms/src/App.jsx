@@ -1,90 +1,48 @@
-import "./App.css";
-import { useState, useEffect } from "react";
-import { Pictogram } from "./components/Pictogram";
-
-import pictogramServices from "./services/pictograms";
-import loginServices from "./services/login";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Link, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { LoginForm } from "./components/LoginForm";
 import PictogramForm from "./components/PictogramForm";
 import { PictogramDisplay } from "./components/PictogramDisplay";
 import RecognitionGame from "./components/Game/RecognitionGame";
+import { useUser } from "./hooks/useUser";
+import { usePictograms } from "./hooks/usePictograms";
 
 function App() {
-  const [pictograms, setPictograms] = useState([]);
-  const [loading, setLoading] = useState();
-  const [user, setUser] = useState(null);
+  const { user, logout, login } = useUser();
+  const { pictograms, createPictogram } = usePictograms(user);
 
-  useEffect(() => {
-  setLoading(true);
-  if (user) {
-    pictogramServices.getPictogramsByUserId(user.id).then((response) => {
-      setPictograms(response);
-      setLoading(false);
-    });
-  }
-}, [user]);
-
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedUser")
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      pictogramServices.setToken(user.token)
-    }
-  }, []);
-
-  const handleLogout = () => {
-    setUser(null)
-    pictogramServices.setToken(user.token)
-    window.localStorage.removeItem("loggedUser")
-  }
-
-  const createPictogram = (pictogramObject) => {
-    pictogramServices
-      .createPictogram(pictogramObject)
-      .then((newPictogram) => {
-        setPictograms(pictograms.concat(newPictogram));
-      })
-      .catch((error) => {
-        console.error("Error al crear el pictograma:", error);
-      });
-  };
-
-  const loginUser = async (username, password) => {
-    try {
-      const user = await loginServices.login( username, password )
-      window.localStorage.setItem("loggedUser", JSON.stringify(user))
-      pictogramServices.setToken(user.token)
-      setUser(user)
-      console.log("Login exitoso:", user)
-    } catch (error) {
-      console.error("Error al hacer login:", error)
-    }
-  }
+  const isLoggedIn = !!user;
 
   return (
-    <>
-      {
-        user
-          ? <div>
-              <PictogramForm 
-                createPictogram={createPictogram}
-              />
-              <div>
-                <button onClick={handleLogout}>Logout</button>
-              </div>
-              <div>
-                { loading ? <p>Cargando...</p> : null }
-                <PictogramDisplay images={pictograms} />
-                <RecognitionGame pictograms={pictograms}></RecognitionGame>
-              </div>
-            </div>
-          : <LoginForm
-              loginUser={loginUser}
-            />
-      }
-    </>
+    <Router>
+      <ToastContainer />
+      <nav>
+        <div>
+          {isLoggedIn && <button><Link to="/">Home</Link></button>}
+          {!isLoggedIn && <button><Link to="/login">Login</Link></button>}
+          {!isLoggedIn && <button><Link to="/register">Register</Link></button>}
+          {isLoggedIn && <button onClick={logout}>Logout</button>}
+        </div>
+        {isLoggedIn && (
+          <div>
+            <button><Link to="/create">Create a new Pictogram</Link></button>
+            <button><Link to="/saac">SAAC</Link></button>
+            <button><Link to="/game">Game</Link></button>
+          </div>
+        )}
+      </nav>
+
+      <Routes>
+        <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <LoginForm login={login} />} />
+        <Route path="/register" element={''} />
+        <Route path="/create" element={isLoggedIn ? <PictogramForm createPictogram={createPictogram} /> : <Navigate to="/login" />} />
+        <Route path="/saac" element={<PictogramDisplay images={pictograms} />} />
+        <Route path="/game" element={<RecognitionGame pictograms={pictograms} />} />
+        <Route path="/" element={''} />
+      </Routes>
+    </Router>
   );
 }
 
