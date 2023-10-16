@@ -1,9 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link, Navigate, Outlet, useNavigate } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  Navigate,
+} from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { LoginForm } from "./components/LoginForm";
 import PictogramForm from "./components/PictogramForm";
+import RegistrationForm from "./components/RegistrationForm"; // Nuevo componente
 import { PictogramDisplay } from "./components/PictogramDisplay";
 import RecognitionGame from "./components/Game/RecognitionGame";
 import { useUser } from "./hooks/useUser";
@@ -36,7 +43,7 @@ function App() {
 
       <Routes>
         <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <LoginForm login={login} />} />
-        <Route path="/register" element={''} />
+        <Route path="/register" element={<RegistrationForm />} /> {/* Ruta para el formulario de registro */}
         <Route path="/create" element={isLoggedIn ? <PictogramForm createPictogram={createPictogram} /> : <Navigate to="/login" />} />
         <Route path="/saac" element={<PictogramDisplay images={pictograms} />} />
         <Route path="/game" element={<RecognitionGame pictograms={pictograms} />} />
