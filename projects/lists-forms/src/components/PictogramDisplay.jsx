@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import './PictogramDisplay.css';
 import Togglable from './Togglable';
+import { useNavigate } from "react-router-dom";
 
 export function PictogramDisplay({ images }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [speaking, setSpeaking] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
+
+  const navigate = useNavigate();
 
   const categories = Array.from(new Set(images.map(image => image.category)));
 
@@ -69,8 +72,18 @@ export function PictogramDisplay({ images }) {
     ? images.filter(image => image.category === selectedCategory)
     : images;
 
+  const handleResetGame = () => {
+    setSelectedImages([]);
+    setSpeaking(false);
+    setSelectedCategory('');
+    navigate("/");
+  }
+
   return (
     <Togglable buttonLabel="Tablero de comunicación">
+      <button onClick={handleResetGame} disabled={speaking}>
+              Reiniciar y Regresar al Inicio
+      </button>
       <div className="container">
         <div className="selected-images-and-buttons">
           <div className="selected-images">

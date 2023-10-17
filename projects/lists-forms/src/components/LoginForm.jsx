@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm = ({ login }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,36 +27,39 @@ export const LoginForm = ({ login }) => {
         position: "top-right",
         autoClose: 3000,
       });
+      setUsername("");
+      setPassword("");
     }
   };
 
   return (
-    <div>
-      <ToastContainer />
-      <h2>LOGIN</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <input
-            type="text"
-            placeholder="username"
-            value={username}
-            name="username"
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div>
-          <button>Login</button>
-        </div>
-      </form>
-    </div>
+      <div>
+        <ToastContainer />
+        <h2>LOGIN</h2>
+        <form onSubmit={handleLogin}>
+          <div>
+            <input
+              type="text"
+              placeholder="username"
+              value={username}
+              name="username"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div>
+            <input
+              type="password"
+              placeholder="password"
+              value={password}
+              name="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <button>Login</button>
+            <button onClick={() => navigate("/")}>Cancel</button>
+          </div>
+        </form>
+      </div>
   );
 };

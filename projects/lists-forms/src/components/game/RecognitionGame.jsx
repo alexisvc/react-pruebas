@@ -2,38 +2,41 @@ import React, { useState, useEffect } from "react";
 import GameHeader from "./GameHeader";
 import PictogramQuestion from "./PictogramQuestion";
 import PictogramOptions from "./PictogramOptions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import confetti from "canvas-confetti";
-
 import "./RecognitionGame.css";
 import Togglable from "../Togglable";
-
+import { useNavigate } from "react-router-dom";
 
 function RecognitionGame({ pictograms }) {
   const [currentPictograms, setCurrentPictograms] = useState([]);
   const [currentPictogram, setCurrentPictogram] = useState(null);
-
   const [difficulty, setDifficulty] = useState("Fácil");
   const [synthesis, setSynthesis] = useState(null);
   const [lives, setLives] = useState(5);
   const [points, setPoints] = useState(0);
   const [badges, setBadges] = useState(0);
+  const [resetGame, setResetGame] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getRandomPictograms(difficulty);
-    // Inicializa la síntesis de voz
+    setResetGame(false);
     const synthesis = window.speechSynthesis;
     setSynthesis(synthesis);
-  }, [difficulty]);
+  }, [difficulty, resetGame]);
 
   const getRandomPictograms = (selectedDifficulty) => {
     let numberOfPictograms = 3;
-  
+
     if (selectedDifficulty === "Normal") {
       numberOfPictograms = 5;
     } else if (selectedDifficulty === "Difícil") {
       numberOfPictograms = 7;
     }
-  
+
     const shuffledPictograms = shuffleArray(pictograms).slice(0, numberOfPictograms);
     setCurrentPictograms(shuffledPictograms);
     getRandomPictogram(shuffledPictograms);
@@ -68,44 +71,53 @@ function RecognitionGame({ pictograms }) {
 
   const checkAnswer = (imageName) => {
     if (currentPictogram && currentPictogram.name === imageName) {
-      confetti(); // Dispara los confettis
-      alert("¡Muy bien!");
-      // Aumentar los puntos en 1
+      confetti();
+      toast.success("¡Muy bien!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       setPoints(points + 1);
-      // Elimina el pictograma correcto de la lista
-      const updatedPictograms = currentPictograms.filter(pictogram => pictogram.name !== imageName);
+      const updatedPictograms = currentPictograms.filter((pictogram) => pictogram.name !== imageName);
       setCurrentPictograms(updatedPictograms);
 
       if (updatedPictograms.length > 0) {
-        // Si quedan pictogramas, selecciona uno nuevo
         getRandomPictogram(updatedPictograms);
       } else {
-        // Si no quedan pictogramas, has completado el juego
-        alert("¡Has completado el juego!");
-        // Aumentar las insignias al completar el juego
+        toast.success("¡Has completado el juego!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setBadges(badges + 1);
-        if(difficulty === "Fácil") {
-          setDifficulty("Normal"); // Reinicia el juego con la dificultad "Normal" (puedes ajustar esto)
-          getRandomPictograms("Normal");
-        } else if (difficulty === "Normal") {
-          setDifficulty("Difícil"); // Reinicia el juego con la dificultad "Difícil" (puedes ajustar esto)
-          getRandomPictograms("Difícil");
-        } 
+        setDifficulty("Fácil");
+        getRandomPictograms("Fácil");
       }
     } else {
-      alert("Incorrecto. Intenta de nuevo.");
-      // Disminuir una vida
+      toast.error("Incorrecto. Intenta de nuevo.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       setLives(lives - 1);
-      // Comprobar si se han agotado todas las vidas
       if (lives - 1 === 0) {
-        alert("¡Has perdido todas tus vidas!");
-        setDifficulty("Fácil"); // Reinicia el juego con la dificultad "Fácil" (puedes ajustar esto)
+        toast.error("¡Has perdido todas tus vidas!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        setDifficulty("Fácil");
         getRandomPictograms("Fácil");
-        setBadges(0); // Reinicia las insignias al perder el juego
-        setPoints(0); // Reinicia los puntos al perder el juego
-        setLives(5); // Reinicia las vidas al perder el juego
+        setBadges(0);
+        setPoints(0);
+        setLives(5);
       }
     }
+  };
+
+  const handleResetGame = () => {
+    setResetGame(true);
+    setDifficulty("Fácil");
+    setBadges(0);
+    setPoints(0);
+    setLives(5);
+    navigate("/");
   };
 
   return (
@@ -113,7 +125,8 @@ function RecognitionGame({ pictograms }) {
       <div className="App">
         <h1 className="game-title">Juego de Reconocimiento</h1>
 
-        {/* Selección de dificultad */}
+        <button onClick={handleResetGame}>Reiniciar Juego y Regresar al Inicio</button>
+
         <div className="difficulty-selector">
           <label htmlFor="difficulty">Dificultad:</label>
           <select
