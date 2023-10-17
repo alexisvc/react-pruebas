@@ -88,8 +88,17 @@ function RecognitionGame({ pictograms }) {
           autoClose: 3000,
         });
         setBadges(badges + 1);
-        setDifficulty("Fácil");
-        getRandomPictograms("Fácil");
+        if (difficulty === "Fácil") {
+          setDifficulty("Normal");
+          getRandomPictograms("Normal");
+        } else if (difficulty === "Normal") {
+          setDifficulty("Difícil");
+          getRandomPictograms("Difícil");
+        } else {
+          setDifficulty("Fácil");
+          getRandomPictograms("Fácil");
+        }
+        
       }
     } else {
       toast.error("Incorrecto. Intenta de nuevo.", {
