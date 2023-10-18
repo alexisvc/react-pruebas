@@ -56,6 +56,7 @@ export default function PictogramForm({ createPictogram }) {
             placeholder="Name"
             value={nameValue}
             onChange={(e) => setNameValue(e.target.value)}
+            required
           />
           </div>
           <div>
@@ -64,6 +65,7 @@ export default function PictogramForm({ createPictogram }) {
             placeholder="Category"
             value={categoryValue}
             onChange={(e) => setCategoryValue(e.target.value)}
+            required
           />
           </div>
           <div>
@@ -72,6 +74,7 @@ export default function PictogramForm({ createPictogram }) {
             placeholder="URL"
             value={urlValue}
             onChange={(e) => setUrlValue(e.target.value)}
+            required
           />
           </div>
           <button>Create</button>

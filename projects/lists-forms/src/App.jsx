@@ -23,7 +23,7 @@ import Home from "./components/Home";
 
 function App() {
   const { user, logout, login } = useUser();
-  const { pictograms, createPictogram } = usePictograms(user);
+  const { pictograms, createPictogram, updatePictogram } = usePictograms(user);
 
   const isLoggedIn = !!user;
 
@@ -33,12 +33,17 @@ function App() {
         <ToastContainer />
         <div className="navbar">
           <div className="nav-links">
-            {isLoggedIn && <button><Link to="/">Home</Link></button>}
-            {!isLoggedIn && <button><Link to="/login">Login</Link></button>}
-            {!isLoggedIn && <button><Link to="/register">Register</Link></button>}
+            {!isLoggedIn && (
+              <>
+                <button><Link to="/">Home</Link></button>
+                <button><Link to="/login">Login</Link></button>
+                <button><Link to="/register">Register</Link></button>
+              </>
+            )}
 
             {isLoggedIn && (
               <>
+                <button><Link to="/">Home</Link></button>
                 <button><Link to="/create">Create a new Pictogram</Link></button>
                 <button><Link to="/saac">SAAC</Link></button>
                 <button><Link to="/game">Game</Link></button>
@@ -52,20 +57,11 @@ function App() {
         <div className="content">
           <Routes>
             <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <LoginForm login={login} />} />
-            <Route path="/register" element={<RegistrationForm />} />
-            <Route
-              path="/create"
-              element={
-                isLoggedIn ? (
-                  <PictogramForm createPictogram={createPictogram} />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
+            <Route path="/register" element={isLoggedIn ? <Navigate to="/" /> : <RegistrationForm />}  />
+            <Route path="/create" element={isLoggedIn ? <PictogramForm createPictogram={createPictogram} /> : <Navigate to="/login" />} />
             <Route path="/saac" element={isLoggedIn ? <PictogramDisplay images={pictograms} /> : <Home />} />
             <Route path="/game" element={ isLoggedIn ? <MenuGame pictograms={pictograms} /> : <Home />} />
-            <Route path="/pictograms" element={isLoggedIn ? <PictogramList pictograms={pictograms} /> : <Home />} />
+            <Route path="/pictograms" element={isLoggedIn ? <PictogramList pictograms={pictograms} updatePictogram={updatePictogram} /> : <Home />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </div>

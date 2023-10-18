@@ -25,8 +25,25 @@ export function usePictograms(user) {
       });
   };
 
+  // Actualizar pictograma
+  const updatePictogram = (id, pictogramObject) => {
+    pictogramServices
+      .updatePictogram(id, pictogramObject)
+      .then((updatedPictogram) => {
+        setPictograms(
+          pictograms.map((pictogram) =>
+            pictogram.id !== id ? pictogram : updatedPictogram
+          )
+        );
+      }
+      ).catch((error) => {
+        console.error("Error al actualizar el pictograma:", error);
+      });
+  }
+
   return {
     pictograms,
     createPictogram,
+    updatePictogram
   };
 }

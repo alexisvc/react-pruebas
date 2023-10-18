@@ -1,4 +1,5 @@
 import React from "react";
+import { FiVolume2 } from "react-icons/fi";
 
 const answersData = [
   {
@@ -192,13 +193,15 @@ function PictogramQuestion({ currentPictogram, handleMouseOver }) {
   return (
     currentPictogram && (
       <div>
-        <h2>¿Qué pictograma representa esta palabra?</h2>
+        <h2>Selecciona el pictograma que pertenezca</h2> {/* Se debe considerar el componente que tiene la indicacion del juego */}
         <img
           src={answersData.find(item => item.name === currentPictogram.name)?.url}
           alt={currentPictogram.name}
         />
         <div>
-            <button onClick={() => handleMouseOver(currentPictogram.name)}>🔊</button>
+            <button onClick={() => handleMouseOver(currentPictogram.name)}>
+              <FiVolume2 size={20}/>
+            </button>
         </div>
       </div>
     )
