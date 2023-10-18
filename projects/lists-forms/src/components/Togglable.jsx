@@ -1,20 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-export default function Togglable ({ children, buttonLabel }) {
-    const [visible, setVisible] = useState(false)
-    // Estilos condicionales
-    const hideWhenVisible = { display: visible ? 'none' : '' }
-    const showWhenVisible = { display: visible ? '' : 'none' }
+export default function Togglable({ children, buttonLabel }) {
+  const [visible, setVisible] = useState(false);
+  // Estilos condicionales
+  const hideWhenVisible = { display: visible ? "none" : "" };
+  const showWhenVisible = { display: visible ? "" : "none" };
 
-    return (
-        <div>
-            <div style={hideWhenVisible}>
-                    <button onClick={() => setVisible(true)}>{ buttonLabel }</button>
-            </div>
-            <div style={showWhenVisible}>
-                {children}
-                <button onClick={() => setVisible(false)}>Cancel</button>
-            </div>
-        </div>
-    )
+  return (
+    <div>
+      <div>
+        <button style={hideWhenVisible} onClick={() => setVisible(true)}>
+          {buttonLabel}
+        </button>
+        <button style={showWhenVisible} onClick={() => setVisible(false)}>
+          Close
+        </button>
+      </div>
+      <div style={showWhenVisible}>{children}</div>
+    </div>
+  );
 }

@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import confetti from "canvas-confetti";
 import "./RecognitionGame.css";
-import Togglable from "../Togglable";
+import Togglable from "../../Togglable";
 import { useNavigate } from "react-router-dom";
 
 function RecognitionGame({ pictograms }) {
@@ -130,7 +130,6 @@ function RecognitionGame({ pictograms }) {
   };
 
   return (
-    <Togglable buttonLabel="Juego de Reconocimiento">
       <div className="App">
         <h1 className="game-title">Juego de Reconocimiento</h1>
 
@@ -161,7 +160,6 @@ function RecognitionGame({ pictograms }) {
           checkAnswer={checkAnswer}
         />
       </div>
-    </Togglable>
   );
 }
 

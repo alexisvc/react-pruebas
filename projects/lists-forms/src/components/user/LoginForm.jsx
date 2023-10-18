@@ -35,7 +35,7 @@ export const LoginForm = ({ login }) => {
   return (
       <div>
         <ToastContainer />
-        <h2>LOGIN</h2>
+        <h2>Login</h2>
         <form onSubmit={handleLogin}>
           <div>
             <input
@@ -44,6 +44,7 @@ export const LoginForm = ({ login }) => {
               value={username}
               name="username"
               onChange={(e) => setUsername(e.target.value)}
+              required
             />
           </div>
           <div>
@@ -53,6 +54,7 @@ export const LoginForm = ({ login }) => {
               value={password}
               name="password"
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
           <div>

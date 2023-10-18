@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRegistration } from "../hooks/useRegistration";
+import { useRegistration } from "../../hooks/useRegistration";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -78,7 +78,7 @@ const RegistrationForm = () => {
               />
             </div>
             <div>
-              <button type="submit" disabled={!username || !name || !password}>
+              <button type="submit" >
                 Register
               </button>
               <button type="button" onClick={() => navigate("/")}>

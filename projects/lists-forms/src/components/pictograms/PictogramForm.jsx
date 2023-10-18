@@ -1,14 +1,14 @@
-// PictogramForm.jsx
-
 import React, { useState } from 'react';
-import Togglable from './Togglable';
+import Togglable from '../Togglable';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router';
 
 export default function PictogramForm({ createPictogram }) {
   const [nameValue, setNameValue] = useState('');
   const [categoryValue, setCategoryValue] = useState('');
   const [urlValue, setUrlValue] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +29,9 @@ export default function PictogramForm({ createPictogram }) {
       setNameValue('');
       setCategoryValue('');
       setUrlValue('');
+
+      navigate('/');
+
     } catch (error) {
       // Notificación de error
       console.error('Error creating pictogram:', error);
@@ -36,6 +39,9 @@ export default function PictogramForm({ createPictogram }) {
         position: 'top-right',
         autoClose: 3000,
       });
+      setNameValue('');
+      setCategoryValue('');
+      setUrlValue('');
     }
   };
 
@@ -44,28 +50,32 @@ export default function PictogramForm({ createPictogram }) {
       <div>
         <h3>Create a new pictogram</h3>
         <form onSubmit={handleSubmit}>
+          <div>
           <input
             type="text"
             placeholder="Name"
             value={nameValue}
             onChange={(e) => setNameValue(e.target.value)}
           />
-          <br />
+          </div>
+          <div>
           <input
             type="text"
             placeholder="Category"
             value={categoryValue}
             onChange={(e) => setCategoryValue(e.target.value)}
           />
-          <br />
+          </div>
+          <div>
           <input
             type="text"
             placeholder="URL"
             value={urlValue}
             onChange={(e) => setUrlValue(e.target.value)}
           />
-          <br />
+          </div>
           <button>Create</button>
+          <button onClick={() => navigate("/")}>Cancel</button>
         </form>
       </div>
       <ToastContainer />

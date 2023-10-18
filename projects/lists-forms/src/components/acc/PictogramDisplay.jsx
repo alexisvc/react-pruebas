@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './PictogramDisplay.css';
-import Togglable from './Togglable';
+import Togglable from '../Togglable';
 import { useNavigate } from "react-router-dom";
 
 export function PictogramDisplay({ images }) {
