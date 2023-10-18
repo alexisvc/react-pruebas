@@ -23,7 +23,7 @@ import Home from "./components/Home";
 
 function App() {
   const { user, logout, login } = useUser();
-  const { pictograms, createPictogram, updatePictogram } = usePictograms(user);
+  const { pictograms, createPictogram, updatePictogram, deletePictogram } = usePictograms(user);
 
   const isLoggedIn = !!user;
 
@@ -48,7 +48,7 @@ function App() {
                 <button><Link to="/saac">SAAC</Link></button>
                 <button><Link to="/game">Game</Link></button>
                 <button><Link to="/pictograms">Pictograms</Link></button>
-                <button onClick={logout}>Logout</button>
+                <button onClick={logout}><Link to="/">Logout</Link></button>
               </>
             )}
           </div>
@@ -61,7 +61,7 @@ function App() {
             <Route path="/create" element={isLoggedIn ? <PictogramForm createPictogram={createPictogram} /> : <Navigate to="/login" />} />
             <Route path="/saac" element={isLoggedIn ? <PictogramDisplay images={pictograms} /> : <Home />} />
             <Route path="/game" element={ isLoggedIn ? <MenuGame pictograms={pictograms} /> : <Home />} />
-            <Route path="/pictograms" element={isLoggedIn ? <PictogramList pictograms={pictograms} updatePictogram={updatePictogram} /> : <Home />} />
+            <Route path="/pictograms" element={isLoggedIn ? <PictogramList pictograms={pictograms} updatePictogram={updatePictogram} deletePictogram={deletePictogram}/> : <Home />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </div>

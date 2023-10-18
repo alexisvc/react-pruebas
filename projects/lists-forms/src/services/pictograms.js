@@ -33,4 +33,11 @@ const updatePictogram = (id, newObject) => {
     .then((response) => response.data);
     };
 
-export default { getAllPictograms, getPictogramsByUserId, createPictogram, updatePictogram, setToken };
+const deletePictogram = (id) => {
+    const config = {
+        headers: { Authorization: token },
+    };
+    return axios.delete(`${baseUrl}/${id}`, config);
+    }
+
+export default { getAllPictograms, getPictogramsByUserId, createPictogram, updatePictogram, setToken, deletePictogram };

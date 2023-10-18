@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { ToastContainer, toast } from 'react-toastify';
 import "./PictogramList.css";
 import Togglable from "../Togglable";
 import EditPictogram from "./EditPictogram";
 
-function PictogramList({ pictograms, updatePictogram }) {
+function PictogramList({ pictograms, updatePictogram, deletePictogram }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [selectedPictogram, setSelectedPictogram] = useState(null);
 
@@ -42,6 +43,15 @@ function PictogramList({ pictograms, updatePictogram }) {
   const handleEditClick = (pictogram) => {
     setShowEditForm(true);
     setSelectedPictogram(pictogram);
+  };
+
+  const handleDeleteClick = (pictogram) => {
+    deletePictogram(pictogram.id);
+    // Notificación de éxito
+    toast.success('Pictogram deleted successfully', {
+      position: 'top-right',
+      autoClose: 3000,
+    });
   };
 
   return (
@@ -83,7 +93,7 @@ function PictogramList({ pictograms, updatePictogram }) {
                       <button onClick={() => handleEditClick(pictogram)}>
                         <FaEdit /> Edit
                       </button>
-                      <button>
+                      <button onClick={() => handleDeleteClick(pictogram)}>
                         <FaTrash /> Delete
                       </button>
                     </td>

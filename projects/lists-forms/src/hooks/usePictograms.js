@@ -41,9 +41,22 @@ export function usePictograms(user) {
       });
   }
 
+  //Eliminar pictograma
+  const deletePictogram = (id) => {
+    pictogramServices
+      .deletePictogram(id)
+      .then(() => {
+        setPictograms(pictograms.filter((pictogram) => pictogram.id !== id));
+      })
+      .catch((error) => {
+        console.error("Error al eliminar el pictograma:", error);
+      });
+  }
+
   return {
     pictograms,
     createPictogram,
-    updatePictogram
+    updatePictogram,
+    deletePictogram
   };
 }
